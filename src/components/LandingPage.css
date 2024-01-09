@@ -1,0 +1,87 @@
+.vanta-hero {
+  background-image: url("../images/background.png"); /* Adjust the path as necessary */
+  background-size: cover;
+  background-position: center;
+  height: 50vh; /* Adjust the height as necessary */
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#vanta-hero h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+#vanta-hero p {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+}
+
+.lottery-section {
+  margin-bottom: 40px;
+}
+
+.lottery-section h2 {
+  font-size: 1.8em;
+  color: #1890ff; /* Ant Design primary color */
+  margin-bottom: 15px;
+}
+
+.lottery-section p {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+.ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+  font-size: 1.1em;
+  padding: 0.5em 1.5em;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Hero Section with Vanta.js */
+.vanta-hero {
+  height: 50vh; /* Adjust height as needed */
+  text-align: center;
+  color: black;
+}
+
+/* Main Content Section */
+.content-section {
+  background: radial-gradient(circle at center, white 0%, lightgray 100%);
+  padding: 20px;
+}
+
+.lottery-section {
+  background-color: white;
+  border-radius: 15px;
+  margin: 20px 0;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+@media (max-width: 767px) {
+  .vanta-root.fallback-background {
+    background-image: ("../images/background.png");
+    background-size: cover;
+    background-position: center;
+  }
+}
