@@ -1,5 +1,10 @@
 .vanta-hero {
-  background-image: url("../images/background.png"); /* Adjust the path as necessary */
+  background: rgb(255, 214, 151);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 214, 151, 1) 0%,
+    rgba(255, 255, 255, 1) 48%
+  );
   background-size: cover;
   background-position: center;
   height: 50vh; /* Adjust the height as necessary */
@@ -17,7 +22,8 @@
 
 #vanta-hero p {
   font-size: 1.2em;
-  margin-bottom: 40px;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .lottery-section {
@@ -66,7 +72,12 @@
 
 /* Main Content Section */
 .content-section {
-  background: radial-gradient(circle at center, white 0%, lightgray 100%);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 214, 151, 1) 48%
+  );
   padding: 20px;
 }
 
@@ -78,10 +89,35 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
 
+.lottery-section h2 {
+  color: orange;
+}
+
+.logo {
+  width: 25%; /* adjust as needed for desktop */
+  height: auto;
+}
+
 @media (max-width: 767px) {
   .vanta-root.fallback-background {
     background-image: ("../images/background.png");
     background-size: cover;
     background-position: center;
+  }
+
+  .vanta-hero img {
+    width: 75%;
+  }
+
+  .lottery-section h2 {
+    font-size: 1.2em;
+  }
+
+  .lottery-section p {
+    font-size: 0.9em;
+  }
+
+  .logo {
+    width: 30px; /* adjust as needed for mobile */
   }
 }

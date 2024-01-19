@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Collapse, Modal, message, Alert } from "antd";
+import { Link } from "react-router-dom";
+import { Collapse, Modal, message, Alert, InputNumber } from "antd";
+import { LeftCircleOutlined } from "@ant-design/icons";
 import polygonLogo from "../images/polygonlogo.png";
 import bitconeLogo from "../images/bitcone192.png";
 import LOTTERY_ABI from "../abis/Lottery.json";
@@ -10,8 +12,8 @@ const { ethers } = require("ethers");
 
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0xF038747b6A3D44b03E7EFD7AC21c539701C95DAe";
-const TOKEN_CONTRACT_ADDRESS = "0xbA777aE3a3C91fCD83EF85bfe65410592Bdd0f7c";
+const CONTRACT_ADDRESS = "0xa5107e9fbb2781CF41BEc06dc77402A3d41d096a";
+const TOKEN_CONTRACT_ADDRESS = "0x80273525B1548EeA1f211f4218Cf30c1a7C86b25";
 
 function App() {
   const [provider, setProvider] = useState(null);
@@ -26,6 +28,9 @@ function App() {
   const [countdown, setCountdown] = useState("");
   const [transactionHash, setTransactionHash] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [lotteryVersion, setLotteryVersion] = useState(0);
+  const [numEntries, setNumEntries] = useState(10);
+  const [userEntries, setUserEntries] = useState(0);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -38,7 +43,7 @@ function App() {
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.request({ method: "net_version" }).then((networkId) => {
-        if (networkId === "137") {
+        if (networkId === "80001") {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const contract = new ethers.Contract(
             CONTRACT_ADDRESS,
@@ -58,12 +63,31 @@ function App() {
           setWrongNetwork(true);
         }
       });
-      window.ethereum.on("chainChanged", (chainId) => {
-        if (parseInt(chainId, 16) === 137) {
+
+      window.ethereum.on("chainChanged", async () => {
+        const networkId = await window.ethereum.request({
+          method: "net_version",
+        });
+        if (networkId === "80001") {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            LOTTERY_ABI,
+            provider
+          );
+          const tokenContract = new ethers.Contract(
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_ABI,
+            provider
+          );
+          setProvider(provider);
+          setContract(contract);
+          setTokenContract(tokenContract);
           setWrongNetwork(false);
-          // Re-initialize your contracts here if needed
         } else {
           setWrongNetwork(true);
+          // Show a message to the user asking them to switch to the supported network
+          setErrorMessage("Please switch to the Matic Mumbai network.");
         }
       });
     }
@@ -72,20 +96,32 @@ function App() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
-      tomorrow.setUTCHours(0, 0, 0, 0);
-      const difference = tomorrow - now;
+      const sevenDaysFromNow = new Date(now);
+      sevenDaysFromNow.setUTCDate(sevenDaysFromNow.getUTCDate() + 7);
+      sevenDaysFromNow.setUTCHours(0, 0, 0, 0);
+      const difference = sevenDaysFromNow - now;
 
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((difference / 1000 / 60) % 60);
       const seconds = Math.floor((difference / 1000) % 60);
 
-      setCountdown(`${hours}:${minutes}:${seconds}`);
+      setCountdown(`${days}:${hours}:${minutes}:${seconds}`);
     }, 1000);
 
     return () => clearInterval(intervalId); // Clear interval on component unmount
   }, []);
+
+  useEffect(() => {
+    if (contract && account) {
+      const fetchUserEntries = async () => {
+        const entries = await contract.getUserEntries(account);
+        setUserEntries(entries.toString()); // Convert the BigNumber to a string
+      };
+
+      fetchUserEntries();
+    }
+  }, [contract, account]);
 
   const connectWallet = async () => {
     const accounts = await window.ethereum.request({
@@ -94,7 +130,7 @@ function App() {
     const networkId = await window.ethereum.request({
       method: "net_version",
     });
-    if (networkId !== "137") {
+    if (networkId !== "80001") {
       setWrongNetwork(true);
     } else {
       setAccount(accounts[0]);
@@ -106,7 +142,7 @@ function App() {
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x89" }],
+        params: [{ chainId: "0x13881" }],
       });
     } catch (error) {
       console.error(error);
@@ -117,9 +153,11 @@ function App() {
     const pool = await contract.getCurrentPool();
     const winner = await contract.getLastWinner();
     const prize = await contract.getLastPrize();
+    const version = await contract.currentLotteryVersion();
     setCurrentPool(ethers.utils.formatEther(pool));
     setLastWinner(winner);
     setLastPrize(ethers.utils.formatEther(prize));
+    setLotteryVersion(version.toString());
   };
 
   const enterLottery = async () => {
@@ -129,11 +167,14 @@ function App() {
       const tokenContractWithSigner = tokenContract.connect(signer);
 
       // Check allowance
+      const requiredAllowance = ethers.utils.parseUnits(
+        (1000000 * numEntries).toString(),
+        18
+      ); // Multiply the required allowance by the number of entries
       const allowance = await tokenContractWithSigner.allowance(
         account,
         CONTRACT_ADDRESS
       );
-      const requiredAllowance = ethers.utils.parseUnits("1000000", 18); // 1000000 tokens with 18 decimals
 
       if (allowance.lt(requiredAllowance)) {
         // If allowance is less than required, ask for approval
@@ -151,7 +192,7 @@ function App() {
         message.success({
           content: "Successfully granted Allowance",
           key: allowanceMessageKey,
-          duration: 60,
+          duration: 30,
         });
 
         // Check allowance again after approval
@@ -189,7 +230,7 @@ function App() {
           </>
         ),
         key: loadingMessageKey,
-        duration: 60,
+        duration: 30,
       });
       setTransactionHash(tx.hash);
       fetchLotteryInfo();
@@ -218,48 +259,76 @@ function App() {
     <div className="lottery-app">
       <div className="App">
         <header className="App-header">
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            {wrongNetwork ? (
-              <button onClick={switchNetwork}>Wrong Network</button>
-            ) : account ? (
-              <>
-                <div className="header-right">
-                  <div className="wallet-info" onClick={showModal}>
-                    <img
-                      src={polygonLogo}
-                      alt="Polygon Image"
-                      className="wallet-image"
-                      style={{ marginRight: "10px" }}
-                    />
-                    {account.substring(0, 5) +
-                      "..." +
-                      account.substring(account.length - 3)}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <div>
+              <Link to="/">
+                <LeftCircleOutlined
+                  style={{
+                    fontSize: "2rem",
+                    color: "black",
+                    marginRight: "90%",
+                    marginLeft: "25%",
+                  }}
+                />
+              </Link>
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {wrongNetwork ? (
+                <button onClick={switchNetwork}>Wrong Network</button>
+              ) : account ? (
+                <>
+                  <div className="header-right">
+                    <div className="wallet-info" onClick={showModal}>
+                      <img
+                        src={polygonLogo}
+                        alt="Polygon Image"
+                        className="wallet-image"
+                        style={{ marginRight: "10px" }}
+                      />
+                      {account.substring(0, 5) +
+                        "..." +
+                        account.substring(account.length - 3)}
+                    </div>
                   </div>
-                </div>
-                <div style={{ width: 0 }}>
-                  <Modal
-                    title="Profile"
-                    open={isModalVisible}
-                    onOk={handleOk}
-                    onCancel={handleOk}
-                    footer={null}
-                  >
-                    <p className="modal-wallet-info">
-                      Account Wallet:{" "}
-                      <a
-                        href={`https://polygonscan.com/address/${account}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {account}
-                      </a>
-                    </p>
-                  </Modal>
-                </div>
-              </>
-            ) : (
-              <button onClick={connectWallet}>Connect Wallet</button>
-            )}
+                  <div style={{ width: 0 }}>
+                    <Modal
+                      title="Profile"
+                      open={isModalVisible}
+                      onOk={handleOk}
+                      onCancel={handleOk}
+                      footer={null}
+                    >
+                      <p className="modal-wallet-info">
+                        Account Wallet:{" "}
+                        <a
+                          href={`https://mumbai.polygonscan.com/address/${account}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {account}
+                        </a>
+                      </p>
+                      <p className="modal-wallet-info">
+                        Entries in current Lottery:{" "}
+                        <strong>{userEntries}</strong>
+                      </p>
+                      <p>
+                        CONE in current Lottery:{" "}
+                        <strong>{formatNumber(userEntries * 10000)}</strong>
+                      </p>
+                    </Modal>
+                  </div>
+                </>
+              ) : (
+                <button onClick={connectWallet}>Connect Wallet</button>
+              )}
+            </div>
           </div>
         </header>
         <main>
@@ -286,8 +355,19 @@ function App() {
           />
           <div className="lottery-info">
             <p>Next pull in: {countdown}</p>
-            <p>Amount in current Lottery: {formatNumber(currentPool)} CONE</p>
-            <p>Entry Amount: 10.000 CONE</p>
+            <p>Current Lottery Version: {lotteryVersion}</p>
+            <p>
+              Amount in current Lottery:{" "}
+              <strong>{formatNumber(currentPool)}</strong> CONE
+            </p>
+            <p>Entry Amount: {formatNumber(numEntries * 10000)} CONE</p>
+            <p>Number of entries: {numEntries}</p>
+            <InputNumber
+              min={1}
+              defaultValue={10}
+              onChange={(value) => setNumEntries(value)}
+              style={{ marginBottom: "10px" }}
+            />
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <button onClick={enterLottery} disabled={!account}>
               Enter Lottery
@@ -300,7 +380,9 @@ function App() {
                 "..." +
                 lastWinner.substring(lastWinner.length - 3)}
             </p>
-            <p>Last amount won: {formatNumber(lastPrize)} CONE</p>
+            <p>
+              Last amount won: <strong>{formatNumber(lastPrize)}</strong> CONE
+            </p>
           </div>
           <div className="faq-section">
             <h2>FAQs</h2>
@@ -329,9 +411,9 @@ function App() {
               </Panel>
               <Panel header="How many tickets can I buy?" key="4">
                 <p>
-                  The current fee for an entry ticket is 1,000,000 CONE. Each
-                  user can purchase an unlimited amount of tickets, but only 1
-                  ticket can be purchased per transaction.
+                  The current fee for an entry ticket is 10,000 CONE. Each user
+                  can purchase an unlimited amount of tickets, but only 1 ticket
+                  can be purchased per transaction.
                 </p>
               </Panel>
               <Panel header="Is there any kind of fee to play?" key="5">

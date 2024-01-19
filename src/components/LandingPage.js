@@ -2,20 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import "./LandingPage.css";
+import bitconewinlogo from "../images/bitconewinlogo.png";
 
 // LandingPage component
 const LandingPage = () => {
   return (
     <div>
       <div className="vanta-hero">
-        <h1>Revolutionize Your Luck with Decentralized Gambling</h1>
-        <p>
-          Step into the future of gaming with our blockchain-powered lottery
-          platform. Utilizing Chainlink's advanced services like Oracles,
-          Upkeeps, and CCIP, we offer a secure and transparent way to multiply
-          your earnings. Experience fair play and automated draws in a
-          decentralized world
-        </p>
+        <img
+          src={bitconewinlogo}
+          alt="Bitconwin Logo"
+          style={{ margin: "auto" }}
+        />
       </div>
       <div className="content-section">
         <div className="lottery-section">
@@ -32,18 +30,21 @@ const LandingPage = () => {
             </Button>
           </Link>
         </div>
-
         <div className="lottery-section">
-          <h2>Coming Soon: The Cross Chain Extravaganza</h2>
+          <h2>What is BitCone?</h2>
           <p>
-            Anticipate the thrill of our upcoming Cross Chain Lottery – a
-            game-changer in the world of decentralized gambling. With CCIP
-            integration, participate seamlessly across different blockchains.
-            Your winnings, no matter the chain, are assuredly sent to you.
+            BitCone (CONE) is a Decentralized Community Utility Token made by
+            Cones, for Cones. 608 Billion tokens were created on the Polygon
+            Network (with no mint function) to parallel the 608 Cone Head -
+            Reddit Collectible Avatar NFT, that inspired a meme Conemunity.
+            BitCone is governed democratically, so every decision is voted on
+            via Conemunity Polls. BitCones can be earned through Airdrops and
+            "BitCone Mining", a revolutionary automated content monetization
+            platform, that incentivizes user engagement on partnered Subreddits.
           </p>
-          <Link to="/cross-chain-lottery">
-            <Button type="default" size="large" disabled>
-              Enter Cross Chain Lottery
+          <Link to="https://bitcone.lol/">
+            <Button type="default" size="large">
+              Click for more information
             </Button>
           </Link>
         </div>
