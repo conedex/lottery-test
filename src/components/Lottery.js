@@ -213,7 +213,7 @@ function App() {
         content: "Processing transaction...",
         key: loadingMessageKey,
       });
-      const tx = await contractWithSigner.enterLottery();
+      const tx = await contractWithSigner.enterLottery(numEntries);
       await tx.wait();
       message.success({
         content: (
@@ -233,9 +233,10 @@ function App() {
         duration: 30,
       });
       setTransactionHash(tx.hash);
-      fetchLotteryInfo();
+      fetchLotteryInfo(); // Refresh lottery info
       setErrorMessage(null); // clear any previous error messages
     } catch (error) {
+      console.error(error); // Log the error object to the console
       if (error.code === 4001) {
         // error code for user rejected transaction
         setErrorMessage("Transaction was not approved.");
