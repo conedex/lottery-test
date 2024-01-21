@@ -31,6 +31,8 @@ function App() {
   const [lotteryVersion, setLotteryVersion] = useState(0);
   const [numEntries, setNumEntries] = useState(10);
   const [userEntries, setUserEntries] = useState(0);
+  const [allowance, setAllowance] = useState(0);
+  const [newAllowance, setNewAllowance] = useState(10000);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -168,7 +170,7 @@ function App() {
 
       // Check allowance
       const requiredAllowance = ethers.utils.parseUnits(
-        (1000000 * numEntries).toString(),
+        (10000 * numEntries).toString(),
         18
       ); // Multiply the required allowance by the number of entries
       const allowance = await tokenContractWithSigner.allowance(
@@ -246,11 +248,48 @@ function App() {
     }
   };
 
+  const increaseAllowance = async () => {
+    const newAllowanceInWei = ethers.utils.parseEther(newAllowance.toString());
+
+    const signer = provider.getSigner();
+    const tokenContractWithSigner = tokenContract.connect(signer);
+
+    const tx = await tokenContractWithSigner.approve(
+      CONTRACT_ADDRESS,
+      newAllowanceInWei
+    );
+    await tx.wait();
+
+    // Refresh allowance
+    const updatedAllowance = await tokenContractWithSigner.allowance(
+      account,
+      CONTRACT_ADDRESS
+    );
+    setAllowance(ethers.utils.formatEther(updatedAllowance));
+  };
+
   useEffect(() => {
     if (contract) {
       fetchLotteryInfo();
     }
   }, [contract]);
+
+  useEffect(() => {
+    if (contract && account) {
+      const fetchUserEntriesAndAllowance = async () => {
+        const entries = await contract.getUserEntries(account);
+        setUserEntries(entries.toString()); // Convert the BigNumber to a string
+
+        const allowance = await tokenContract.allowance(
+          account,
+          CONTRACT_ADDRESS
+        );
+        setAllowance(ethers.utils.formatEther(allowance));
+      };
+
+      fetchUserEntriesAndAllowance();
+    }
+  }, [contract, account]);
 
   function formatNumber(num) {
     return new Intl.NumberFormat().format(Math.floor(num));
@@ -323,6 +362,17 @@ function App() {
                         CONE in current Lottery:{" "}
                         <strong>{formatNumber(userEntries * 10000)}</strong>
                       </p>
+                      <p className="modal-wallet-info">
+                        Allowance given: <strong>{allowance}</strong>
+                      </p>
+                      <InputNumber
+                        min={1}
+                        defaultValue={10000}
+                        onChange={(value) => setNewAllowance(value)}
+                      />
+                      <button onClick={increaseAllowance}>
+                        Change Allowance
+                      </button>
                     </Modal>
                   </div>
                 </>
