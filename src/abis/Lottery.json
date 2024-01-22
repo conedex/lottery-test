@@ -22,7 +22,8 @@
         "internalType": "uint256",
         "name": "_coneTreasuryFee",
         "type": "uint256"
-      }
+      },
+      { "internalType": "address", "name": "_nftContract", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -303,6 +304,19 @@
     "inputs": [],
     "name": "nextUserId",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nftContract",
+    "outputs": [
+      {
+        "internalType": "contract LotteryWinnerNFT",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },

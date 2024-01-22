@@ -6,14 +6,16 @@ import polygonLogo from "../images/polygonlogo.png";
 import bitconeLogo from "../images/bitcone192.png";
 import LOTTERY_ABI from "../abis/Lottery.json";
 import TOKEN_ABI from "../abis/Token.json";
+import NFT_ABI from "../abis/Nft.json";
 import "./Lottery.css";
 
 const { ethers } = require("ethers");
 
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0xa5107e9fbb2781CF41BEc06dc77402A3d41d096a";
+const CONTRACT_ADDRESS = "0x1b9469dabA419E2e83BcB0831c0E31fa9B6401F2";
 const TOKEN_CONTRACT_ADDRESS = "0x80273525B1548EeA1f211f4218Cf30c1a7C86b25";
+const NFT_CONTRACT_ADDRESS = "0x6Bd3a2F6b91830E964a5b3906E0DBF92a5A5Cc53";
 
 function App() {
   const [provider, setProvider] = useState(null);
@@ -33,6 +35,8 @@ function App() {
   const [userEntries, setUserEntries] = useState(0);
   const [allowance, setAllowance] = useState(0);
   const [newAllowance, setNewAllowance] = useState(10000);
+  const [nftContract, setNftContract] = useState(null);
+  const [bonusCone, setBonusCone] = useState(0);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -40,6 +44,11 @@ function App() {
 
   const handleOk = () => {
     setIsModalVisible(false);
+  };
+
+  const fetchBonusCone = async () => {
+    const balance = await tokenContract.balanceOf(NFT_CONTRACT_ADDRESS);
+    setBonusCone(ethers.utils.formatEther(balance));
   };
 
   useEffect(() => {
@@ -57,9 +66,15 @@ function App() {
             TOKEN_ABI,
             provider
           );
+          const nftContract = new ethers.Contract(
+            NFT_CONTRACT_ADDRESS,
+            NFT_ABI,
+            provider
+          );
           setProvider(provider);
           setContract(contract);
           setTokenContract(tokenContract);
+          setNftContract(nftContract);
           setWrongNetwork(false);
         } else {
           setWrongNetwork(true);
@@ -82,9 +97,15 @@ function App() {
             TOKEN_ABI,
             provider
           );
+          const nftContract = new ethers.Contract(
+            NFT_CONTRACT_ADDRESS,
+            NFT_ABI,
+            provider
+          );
           setProvider(provider);
           setContract(contract);
           setTokenContract(tokenContract);
+          setNftContract(nftContract);
           setWrongNetwork(false);
         } else {
           setWrongNetwork(true);
@@ -98,17 +119,16 @@ function App() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
-      const sevenDaysFromNow = new Date(now);
-      sevenDaysFromNow.setUTCDate(sevenDaysFromNow.getUTCDate() + 7);
-      sevenDaysFromNow.setUTCHours(0, 0, 0, 0);
-      const difference = sevenDaysFromNow - now;
+      const tomorrow = new Date(now);
+      tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+      tomorrow.setUTCHours(0, 0, 0, 0);
+      const difference = tomorrow - now;
 
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((difference / 1000 / 60) % 60);
       const seconds = Math.floor((difference / 1000) % 60);
 
-      setCountdown(`${days}:${hours}:${minutes}:${seconds}`);
+      setCountdown(`${hours}:${minutes}:${seconds}`);
     }, 1000);
 
     return () => clearInterval(intervalId); // Clear interval on component unmount
@@ -271,6 +291,7 @@ function App() {
   useEffect(() => {
     if (contract) {
       fetchLotteryInfo();
+      fetchBonusCone();
     }
   }, [contract]);
 
@@ -411,6 +432,12 @@ function App() {
               Amount in current Lottery:{" "}
               <strong>{formatNumber(currentPool)}</strong> CONE
             </p>
+            {bonusCone > 0 && (
+              <p>
+                Bonus CONE in Lottery:{" "}
+                <strong>{formatNumber(bonusCone)}</strong> CONE
+              </p>
+            )}
             <p>Entry Amount: {formatNumber(numEntries * 10000)} CONE</p>
             <p>Number of entries: {numEntries}</p>
             <InputNumber
@@ -462,7 +489,7 @@ function App() {
               </Panel>
               <Panel header="How many tickets can I buy?" key="4">
                 <p>
-                  The current fee for an entry ticket is 10,000 CONE. Each user
+                  The current fee for an entry ticket is 10.000 CONE. Each user
                   can purchase an unlimited amount of tickets, but only 1 ticket
                   can be purchased per transaction.
                 </p>
@@ -470,9 +497,9 @@ function App() {
               <Panel header="Is there any kind of fee to play?" key="5">
                 <p>
                   There is no fee to purchase Lottery Tickets, but there is a
-                  10% fee on the Prize Pool. 5% of which goes to the Bitcone
-                  Treasury Wallet, along with a 5% fee which goes to the Creator
-                  to cover $LINK Chainlink utilization costs on every
+                  15% fee on the Prize Pool. 5% of which goes to the Bitcone
+                  Treasury Wallet, along with a 10% fee which goes to the
+                  Creator to cover $LINK Chainlink utilization costs on every
                   transaction, as well as operational and hosting costs.
                 </p>
               </Panel>
