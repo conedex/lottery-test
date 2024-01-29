@@ -31,22 +31,38 @@ const LandingPage = () => {
           </Link>
         </div>
         <div className="lottery-section">
-          <h2>What is BitCone?</h2>
+          <h2>ConeDEX V2 - WorkInProgress</h2>
           <p>
-            BitCone (CONE) is a Decentralized Community Utility Token made by
-            Cones, for Cones. 608 Billion tokens were created on the Polygon
-            Network (with no mint function) to parallel the 608 Cone Head -
-            Reddit Collectible Avatar NFT, that inspired a meme Conemunity.
-            BitCone is governed democratically, so every decision is voted on
-            via Conemunity Polls. BitCones can be earned through Airdrops and
-            "BitCone Mining", a revolutionary automated content monetization
-            platform, that incentivizes user engagement on partnered Subreddits.
+            ConeDEX V2 is a Decentralized more modern Exchange built on the
+            Polygon Network. Here you can grab some free Testnet CONE. The Site
+            is a work in Progress, do not use it on Mainnet!
           </p>
-          <Link to="https://bitcone.lol/">
+          <a
+            href="https://conedex.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button type="default" size="large">
-              Click for more information
+              Enter ConeDEX
             </Button>
-          </Link>
+          </a>
+        </div>
+        <div className="lottery-section">
+          <h2>ConeDEX V1- WorkInProgress</h2>
+          <p>
+            ConeDEX is a Decentralized Exchange built on the Polygon Network.
+            Here you can grab some free Testnet CONE. The Site is a work in
+            Progress, do not use it on Mainnet!
+          </p>
+          <a
+            href="https://testnet.conedex.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button type="default" size="large">
+              Enter ConeDEX
+            </Button>
+          </a>
         </div>
       </div>
     </div>
