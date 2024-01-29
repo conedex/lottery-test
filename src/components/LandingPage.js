@@ -38,7 +38,7 @@ const LandingPage = () => {
             is a work in Progress, do not use it on Mainnet!
           </p>
           <a
-            href="https://conedex.com"
+            href="https://conedex.com/de/swap?inputCurrency=ETH&outputCurrency=0xbA777aE3a3C91fCD83EF85bfe65410592Bdd0f7c&chainId=137"
             target="_blank"
             rel="noopener noreferrer"
           >
