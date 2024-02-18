@@ -31,7 +31,7 @@ const LandingPage = () => {
           </Link>
         </div>
         <div className="lottery-section">
-          <h2>Sponsored Lottery Test</h2>
+          <h2>Sponsored Lottery</h2>
           <p>
             Dive into our lottery with multiple winners for a higher chance to
             win. Bet with Bitcone tokens and watch your fortune unfold. A slice
