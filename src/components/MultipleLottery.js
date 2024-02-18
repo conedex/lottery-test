@@ -366,7 +366,7 @@ function App() {
 
   return (
     <div className="lottery-app">
-      <div className="App">
+      <div className="MultipleLotteryApp">
         <header className="App-header">
           <div
             style={{
