@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Collapse, Modal, message, Alert, InputNumber } from "antd";
+import { Collapse, Modal, message, InputNumber } from "antd";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import polygonLogo from "../images/polygonlogo.png";
 import bitconeLogo from "../images/bitcone192.png";
-import LOTTERY_ABI from "../abis/Lottery.json";
+import LOTTERY_ABI from "../abis/MultipleLottery.json";
 import TOKEN_ABI from "../abis/Token.json";
 import NFT_ABI from "../abis/Nft.json";
-import "./Lottery.css";
+import "./MultipleLottery.css";
 
 const { ethers } = require("ethers");
 const RPC_PROVIDER_URL =
   "https://polygon-mumbai.g.alchemy.com/v2/GFlZaSYw8xngFQT_K2m0yGmRkRzZlg6E";
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0x1b9469dabA419E2e83BcB0831c0E31fa9B6401F2";
-const TOKEN_CONTRACT_ADDRESS = "0x80273525B1548EeA1f211f4218Cf30c1a7C86b25";
+const CONTRACT_ADDRESS = "0x9C200959023Fe0503733F47C5Df5DD5b78Dc212A";
+const TOKEN_CONTRACT_ADDRESS = "0x4b762dEf33b0a8484628B70fDe1800d14eE71B64";
 const NFT_CONTRACT_ADDRESS = "0x6Bd3a2F6b91830E964a5b3906E0DBF92a5A5Cc53";
 const lastWinnerHardcodeAmount = "16.960.000";
 const lastWinnerHardcodeAddress = "0x89B3fdf5cd302D012f92a81341017252B7b9515a";
-const coneTreasuryAmountHardcodedOverall = "...";
-const coneTreasuryAmountHardcoded = "...";
+const coneTreasuryAmountHardcodedOverall = "420";
+const coneTreasuryAmountHardcoded = "2663";
 
 function App() {
   const [provider, setProvider] = useState(null);
@@ -28,7 +28,9 @@ function App() {
   const [tokenContract, setTokenContract] = useState(null);
   const [account, setAccount] = useState(null);
   const [currentPool, setCurrentPool] = useState(0);
-  const [lastWinner, setLastWinner] = useState("");
+  const [lastWinner1, setLastWinner1] = useState("");
+  const [lastWinner2, setLastWinner2] = useState("");
+  const [lastWinner3, setLastWinner3] = useState("");
   const [lastPrize, setLastPrize] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
   const [wrongNetwork, setWrongNetwork] = useState(false);
@@ -39,7 +41,7 @@ function App() {
   const [numEntries, setNumEntries] = useState(10);
   const [userEntries, setUserEntries] = useState(0);
   const [allowance, setAllowance] = useState(0);
-  const [newAllowance, setNewAllowance] = useState(10000);
+  const [newAllowance, setNewAllowance] = useState(1);
   const [nftContract, setNftContract] = useState(null);
   const [isContractPaused, setIsContractPaused] = useState(false);
 
@@ -216,11 +218,15 @@ function App() {
 
   const fetchLotteryInfo = async () => {
     const pool = await contract.getCurrentPool();
-    const winner = await contract.getLastWinner();
+    const winner1 = await contract.getFirstWinner();
+    const winner2 = await contract.getSecondWinner();
+    const winner3 = await contract.getThirdWinner();
     const prize = await contract.getLastPrize();
     const version = await contract.currentLotteryVersion();
     setCurrentPool(ethers.utils.formatEther(pool));
-    setLastWinner(winner);
+    setLastWinner1(winner1);
+    setLastWinner2(winner2);
+    setLastWinner3(winner3);
     setLastPrize(ethers.utils.formatEther(prize));
     setLotteryVersion(version.toString());
   };
@@ -417,20 +423,32 @@ function App() {
                           {account}
                         </a>
                       </p>
+                      <p>
+                        MOCK sent to the Treasuy through the last Lottery:{" "}
+                        <br></br>
+                        <strong>{coneTreasuryAmountHardcoded}</strong> CONE
+                      </p>
+                      <p>
+                        MOCK sent to the Treasuy overall: <br></br>
+                        <strong>
+                          {coneTreasuryAmountHardcodedOverall}
+                        </strong>{" "}
+                        MOCK
+                      </p>
                       <p className="modal-wallet-info">
                         Entries in current Lottery:{" "}
                         <strong>{userEntries}</strong>
                       </p>
                       <p>
-                        CONE in current Lottery:{" "}
-                        <strong>{formatNumber(userEntries * 10000)}</strong>
+                        MOCK in current Lottery:{" "}
+                        <strong>{formatNumber(userEntries * 1)}</strong>
                       </p>
                       <p className="modal-wallet-info">
                         Allowance given: <strong>{allowance}</strong>
                       </p>
                       <InputNumber
                         min={1}
-                        defaultValue={10000}
+                        defaultValue={1}
                         onChange={(value) => setNewAllowance(value)}
                       />
                       <button onClick={increaseAllowance}>
@@ -453,7 +471,7 @@ function App() {
               className="bitcone-header"
               style={{ marginRight: "1%", marginLeft: "1%" }}
             />
-            BitCone Lottery
+            Sponsored Lottery
             <img
               src={bitconeLogo}
               alt="Bitcone Logo Left"
@@ -472,9 +490,9 @@ function App() {
             <p>Current Lottery Version: {lotteryVersion}</p>
             <p>
               Amount in current Lottery:{" "}
-              <strong>{formatNumber(currentPool)}</strong> CONE
+              <strong>{formatNumber(currentPool)}</strong> MOCK
             </p>
-            <p>Entry Amount: {formatNumber(numEntries * 10000)} CONE</p>
+            <p>Entry Amount: {formatNumber(numEntries * 1)} MOCK</p>
             <p>Number of entries: {numEntries}</p>
             <InputNumber
               min={1}
@@ -492,24 +510,40 @@ function App() {
           </div>
           <div className="lastWinner">
             <p>
-              Last Winner:<br></br>
+              Last Winner #1:<br></br>
               <strong>
-                {lastWinner.substring(0, 5) +
+                {lastWinner1.substring(0, 5) +
                   "..." +
-                  lastWinner.substring(lastWinner.length - 5)}
+                  lastWinner1.substring(lastWinner1.length - 5)}
               </strong>
             </p>
             <p>
-              Last amount won: <br></br>
-              <strong>{formatNumber(lastPrize)}</strong> CONE
+              Amount Won: <br></br>
+              <strong>{formatNumber(lastPrize)}</strong> MOCK
             </p>
             <p>
-              Amount sent to CONE Treasuy: <br></br>
-              <strong>{coneTreasuryAmountHardcoded}</strong> CONE
+              Last Winner #2:<br></br>
+              <strong>
+                {lastWinner2.substring(0, 5) +
+                  "..." +
+                  lastWinner2.substring(lastWinner2.length - 5)}
+              </strong>
             </p>
             <p>
-              Amount sent to CONE Treasuy overall: <br></br>
-              <strong>{coneTreasuryAmountHardcodedOverall}</strong> CONE
+              Amount Won: <br></br>
+              <strong>{formatNumber(lastPrize)}</strong> MOCK
+            </p>
+            <p>
+              Last Winner #3:<br></br>
+              <strong>
+                {lastWinner3.substring(0, 5) +
+                  "..." +
+                  lastWinner3.substring(lastWinner3.length - 5)}
+              </strong>
+            </p>
+            <p>
+              Amount Won: <br></br>
+              <strong>{formatNumber(lastPrize)}</strong> MOCK
             </p>
           </div>
           {/*<div className="lastWinner">
@@ -537,16 +571,16 @@ function App() {
             <Collapse defaultActiveKey={["0"]} className="faq-collapse">
               <Panel header="How does this Lottery work?" key="1">
                 <p>
-                  Users can purchase Lottery Tickets for a fixed price in CONE
-                  per Ticket. At the end of each Lottery round a winning ticket
-                  is randomly selected to win the Prize Pot!
+                  Users can purchase Lottery Tickets for a fixed price in MOCK
+                  per Ticket. At the end of each Lottery round 3 winning tickets
+                  are randomly selected to win the Prize Pot!
                 </p>
               </Panel>
               <Panel header="How often is a winner selected?" key="2">
                 <p>
-                  A winner is selected at the end of each Lottery round. Each
-                  round lasts for 7 days, you may view the next Winner pull date
-                  at the top of the website!
+                  Three winners are selected at the end of each Lottery round.
+                  Each round lasts for 7 days, you may view the next Winner pull
+                  date at the top of the website!
                 </p>
               </Panel>
               <Panel header="How are winners selected?" key="3">
@@ -557,16 +591,23 @@ function App() {
                   automatically.
                 </p>
               </Panel>
-              <Panel header="How many tickets can I buy?" key="4">
+              <Panel header="How much does each Winner get?" key="4">
                 <p>
-                  The current price for an entry ticket is 10.000 CONE. Each
-                  user can purchase an unlimited amount of tickets.
+                  The Winner #1 gets 50% of the Prize Pool. The Winner #2 gets
+                  25% of the Prize Pool and the Winner #3 gets 10% of the Prize
+                  Pool.
                 </p>
               </Panel>
-              <Panel header="Is there any kind of fee to play?" key="5">
+              <Panel header="How many tickets can I buy?" key="5">
+                <p>
+                  The current price for an entry ticket is 1 MOCK. Each user can
+                  purchase an unlimited amount of tickets.
+                </p>
+              </Panel>
+              <Panel header="Is there any kind of fee to play?" key="6">
                 <p>
                   There is no fee to purchase Lottery Tickets, but there is a
-                  20% fee on the Prize Pool. 5% of which goes to the Bitcone
+                  20% fee on the Prize Pool. 5% of which goes to the MOCK
                   Treasury Wallet, along with a 15% which goes to the Creator to
                   cover $LINK Chainlink utilization costs on every transaction,
                   as well as operational and hosting costs.
@@ -574,7 +615,7 @@ function App() {
               </Panel>
               <Panel
                 header="What are the benefits of using this Lottery?"
-                key="6"
+                key="7"
               >
                 <p>
                   The Lottery Smart contract is immutable, this means the owner

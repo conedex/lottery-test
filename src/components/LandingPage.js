@@ -31,6 +31,20 @@ const LandingPage = () => {
           </Link>
         </div>
         <div className="lottery-section">
+          <h2>Sponsored Lottery Test</h2>
+          <p>
+            Dive into our lottery with multiple winners for a higher chance to
+            win. Bet with Bitcone tokens and watch your fortune unfold. A slice
+            of every jackpot enriches the Coneheads ecosystem, fostering
+            community growth and shared success.
+          </p>
+          <Link to="/sponsoredlottery">
+            <Button type="default" size="large">
+              Enter Sponsored Lottery
+            </Button>
+          </Link>
+        </div>
+        <div className="lottery-section">
           <h2>ConeDEX V2 - WorkInProgress</h2>
           <p>
             ConeDEX V2 is a Decentralized more modern Exchange built on the
