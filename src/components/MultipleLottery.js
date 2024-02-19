@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Collapse, Modal, message, InputNumber } from "antd";
+import { Collapse, Modal, message, InputNumber, Alert } from "antd";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import polygonLogo from "../images/polygonlogo.png";
 import bitconeLogo from "../images/bitcone192.png";
@@ -14,7 +14,7 @@ const RPC_PROVIDER_URL =
   "https://polygon-mumbai.g.alchemy.com/v2/GFlZaSYw8xngFQT_K2m0yGmRkRzZlg6E";
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0x9C200959023Fe0503733F47C5Df5DD5b78Dc212A";
+const CONTRACT_ADDRESS = "0xf6bb33cfaC8d528C027318f1f63E6a3aca8e9a91";
 const TOKEN_CONTRACT_ADDRESS = "0x4b762dEf33b0a8484628B70fDe1800d14eE71B64";
 const NFT_CONTRACT_ADDRESS = "0x6Bd3a2F6b91830E964a5b3906E0DBF92a5A5Cc53";
 const lastWinnerHardcodeAmount = "16.960.000";
@@ -32,6 +32,8 @@ function App() {
   const [lastWinner2, setLastWinner2] = useState("");
   const [lastWinner3, setLastWinner3] = useState("");
   const [lastPrize, setLastPrize] = useState(0);
+  const [secondPrize, setSecondPrize] = useState(0);
+  const [thirdPrize, setThirdPrize] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
   const [wrongNetwork, setWrongNetwork] = useState(false);
   const [countdown, setCountdown] = useState("");
@@ -222,12 +224,16 @@ function App() {
     const winner2 = await contract.getSecondWinner();
     const winner3 = await contract.getThirdWinner();
     const prize = await contract.getLastPrize();
+    const prize2 = await contract.getSecondPrize();
+    const prize3 = await contract.getThirdPrize();
     const version = await contract.currentLotteryVersion();
     setCurrentPool(ethers.utils.formatEther(pool));
     setLastWinner1(winner1);
     setLastWinner2(winner2);
     setLastWinner3(winner3);
     setLastPrize(ethers.utils.formatEther(prize));
+    setSecondPrize(ethers.utils.formatEther(prize2));
+    setThirdPrize(ethers.utils.formatEther(prize3));
     setLotteryVersion(version.toString());
   };
 
@@ -479,12 +485,12 @@ function App() {
               style={{ marginRight: "1%", marginLeft: "1%" }}
             />
           </h1>
-          {/*<Alert
+          <Alert
             type="warning"
-            description="For the best experience access our Lottery with a Browser on a Desktop."
+            description="If the value doesn't update correctly, please reload the page"
             showIcon={true}
             className="alert"
-              />*/}
+          />
           <div className="lottery-info">
             <p>Next pull in: {countdown}</p>
             <p>Current Lottery Version: {lotteryVersion}</p>
@@ -531,7 +537,7 @@ function App() {
             </p>
             <p>
               Amount Won: <br></br>
-              <strong>{formatNumber(lastPrize)}</strong> MOCK
+              <strong>{formatNumber(secondPrize)}</strong> MOCK
             </p>
             <p>
               Last Winner #3:<br></br>
@@ -543,7 +549,7 @@ function App() {
             </p>
             <p>
               Amount Won: <br></br>
-              <strong>{formatNumber(lastPrize)}</strong> MOCK
+              <strong>{formatNumber(thirdPrize)}</strong> MOCK
             </p>
           </div>
           {/*<div className="lastWinner">
