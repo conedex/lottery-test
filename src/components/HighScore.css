@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.highscore-app {
+  text-align: center;
+  min-height: 100vh;
+  background: black;
+}
+
+.highscore-image {
+  width: 50%;
+  height: auto;
+}
+
+.highscore-select {
+  width: 200px;
+  margin-bottom: 2.5%;
+}
+
+.highscore-headers,
+.highscore-item {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  color: white;
+}
+
+.highscore-headers span,
+.highscore-list .highscore-item span {
+  font-family: "Press Start 2P", cursive;
+}
+
+.highscore-list {
+  font-size: 1.5rem;
+  color: white;
+  list-style-type: none;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .highscore-image {
+    width: 75%;
+  }
+
+  .highscore-select {
+    width: 75%;
+    margin-bottom: 5%;
+  }
+
+  .highscore-headers,
+  .highscore-item {
+    justify-content: space-between;
+    margin: 0 1% 0 1%;
+  }
+
+  .highscore-headers span,
+  .highscore-list .highscore-item span {
+    font-size: 0.75rem;
+  }
+
+  .highscore-list {
+    font-size: 0.5rem;
+  }
+}

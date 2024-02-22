@@ -1,0 +1,12 @@
+[
+  {
+    "version": 1,
+    "amount": "100.000.000",
+    "wallet": "0xABC123"
+  },
+  {
+    "version": 2,
+    "amount": "50.000.000",
+    "wallet": "0xDEF456"
+  }
+]

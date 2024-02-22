@@ -45,6 +45,15 @@ const LandingPage = () => {
           </Link>
         </div>
         <div className="lottery-section">
+          <h2>High-Scores</h2>
+          <p>Check the top Winners from our Lotterys!</p>
+          <Link to="/highscore">
+            <Button type="default" size="large">
+              Enter High-Scores
+            </Button>
+          </Link>
+        </div>
+        <div className="lottery-section">
           <h2>ConeDEX V2 - WorkInProgress</h2>
           <p>
             ConeDEX V2 is a Decentralized more modern Exchange built on the
