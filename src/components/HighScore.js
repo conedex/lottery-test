@@ -12,12 +12,36 @@ const HighScore = () => {
 
   useEffect(() => {
     const sortScores = () => {
-      const sorted = [...scoresData].sort((a, b) => {
-        if (sortKey === "amount") {
-          return b.amount - a.amount;
-        }
-        return a.version - b.version;
-      });
+      let sorted;
+      if (sortKey === "amount") {
+        sorted = [...scoresData].sort(
+          (a, b) =>
+            parseInt(b.amountInNumber, 10) - parseInt(a.amountInNumber, 10)
+        );
+      } else if (sortKey === "combinedAmount") {
+        // Combine scores by wallet and sum amountInNumber, also update amount string
+        const combinedScores = scoresData.reduce((acc, curr) => {
+          const wallet = curr.wallet;
+          if (!acc[wallet]) {
+            acc[wallet] = {
+              ...curr,
+              amountInNumber: parseInt(curr.amountInNumber, 10),
+            };
+          } else {
+            acc[wallet].amountInNumber += parseInt(curr.amountInNumber, 10);
+            // Update the amount string to reflect the new combined total
+            acc[wallet].amount = acc[wallet].amountInNumber
+              .toLocaleString("en-US")
+              .replace(/,/g, ".");
+          }
+          return acc;
+        }, {});
+        sorted = Object.values(combinedScores).sort(
+          (a, b) => b.amountInNumber - a.amountInNumber
+        );
+      } else {
+        sorted = [...scoresData].sort((a, b) => a.version - b.version);
+      }
       setSortedScores(sorted);
     };
 
@@ -56,13 +80,16 @@ const HighScore = () => {
             options={[
               { value: "version", label: "Sort by Version" },
               { value: "amount", label: "Sort by Amount" },
+              { value: "combinedAmount", label: "Sort by Combined Amount" },
             ]}
           />
           <div className="highscore-headers">
             <span>{sortKey === "version" ? "Version" : "Rank"}</span>
             <span>Amount</span>
             <span>Address</span>
-            {sortKey !== "version" && <span>Version</span>}
+            {sortKey !== "version" && sortKey !== "combinedAmount" && (
+              <span>Version</span>
+            )}
           </div>
           <ol className="highscore-list">
             {sortedScores.map((score, index) => (
@@ -70,7 +97,9 @@ const HighScore = () => {
                 <span>{sortKey === "version" ? score.version : index + 1}</span>
                 <span>{score.amount}</span>
                 <span>{score.wallet}</span>
-                {sortKey !== "version" && <span>{score.version}</span>}
+                {sortKey !== "version" && sortKey !== "combinedAmount" && (
+                  <span>{score.version}</span>
+                )}
               </li>
             ))}
           </ol>

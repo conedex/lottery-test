@@ -1,12 +1,32 @@
 [
   {
     "version": 1,
-    "amount": "100.000.000",
-    "wallet": "0xABC123"
+    "amount": "220.800.000",
+    "amountInNumber": 220800000,
+    "wallet": "keyoh321"
   },
   {
     "version": 2,
-    "amount": "50.000.000",
-    "wallet": "0xDEF456"
+    "amount": "16.960.000",
+    "amountInNumber": 16960000,
+    "wallet": "blockrocketman"
+  },
+  {
+    "version": 3,
+    "amount": "15.640.000",
+    "amountInNumber": 15640000,
+    "wallet": "Simple_Mastodon9220"
+  },
+  {
+    "version": 4,
+    "amount": "4.880.000",
+    "amountInNumber": 4880000,
+    "wallet": "CaptainCheeseCake"
+  },
+  {
+    "version": 5,
+    "amount": "18.888.000",
+    "amountInNumber": 18888000,
+    "wallet": "Simple_Mastodon9220"
   }
 ]

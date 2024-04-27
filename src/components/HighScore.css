@@ -27,6 +27,8 @@
 .highscore-headers span,
 .highscore-list .highscore-item span {
   font-family: "Press Start 2P", cursive;
+  flex-basis: 33%;
+  text-align: center;
 }
 
 .highscore-list {
@@ -48,16 +50,20 @@
 
   .highscore-headers,
   .highscore-item {
-    justify-content: space-between;
+    display: flex;
+    justify-content: space-around;
     margin: 0 1% 0 1%;
   }
 
   .highscore-headers span,
   .highscore-list .highscore-item span {
-    font-size: 0.75rem;
+    font-size: 0.4rem;
+    flex-basis: 33%;
+    text-align: center;
+    padding: 0 5px;
   }
 
   .highscore-list {
-    font-size: 0.5rem;
+    font-size: 0.75rem;
   }
 }

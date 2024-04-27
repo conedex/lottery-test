@@ -30,6 +30,20 @@ const LandingPage = () => {
             </Button>
           </Link>
         </div>
+        <div className="donut-lottery-section">
+          <h2>Dash into the daring Donut Dance: Our Donut Lottery</h2>
+          <p>
+            Dive into our new and improved lottery uniquely crafted for the
+            Donut community. Bet with DONUT tokens and watch your fortune
+            unfold. A slice of every jackpot enriches the Donut ecosystem,
+            fostering community growth and shared success.
+          </p>
+          <Link to="/donutlottery">
+            <Button type="default" size="large">
+              Enter Donut Lottery
+            </Button>
+          </Link>
+        </div>
         <div className="lottery-section">
           <h2>Sponsored Lottery</h2>
           <p>
@@ -41,6 +55,15 @@ const LandingPage = () => {
           <Link to="/sponsoredlottery">
             <Button type="default" size="large">
               Enter Sponsored Lottery
+            </Button>
+          </Link>
+        </div>
+        <div className="lottery-section">
+          <h2>Staking</h2>
+          <p>Stake your CONE to receive great rewards!</p>
+          <Link to="/staking">
+            <Button type="default" size="large">
+              Enter Staking
             </Button>
           </Link>
         </div>
