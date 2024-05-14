@@ -13,7 +13,7 @@ const RPC_PROVIDER_URL =
   "https://arb-sepolia.g.alchemy.com/v2/ugd7jfUBYMANMA4kZftaqnTcBoJGx8B0";
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0x75EaEd29Db687744a185Be4B2061b546A674cAcf";
+const CONTRACT_ADDRESS = "0x0Fc6164A5f536690da7c55533e44E47691F36C91";
 const TOKEN_CONTRACT_ADDRESS = "0xC49677D218C2a53869430dCF70247732a520b772";
 const lastWinnerHardcodeAmount = "0";
 const lastWinnerHardcodeAddress = "0x89B3fdf5cd302D012f92a81341017252B7b9515a";
