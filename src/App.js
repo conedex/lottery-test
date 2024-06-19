@@ -4,6 +4,7 @@ import LandingPage from "./components/LandingPage";
 import Lottery from "./components/Lottery";
 import DonutLottery from "./components/DonutLottery";
 import MultipleLottery from "./components/MultipleLottery";
+import ShroomLottery from "./components/ShroomLottery";
 import HighScore from "./components/HighScore";
 import Staking from "./components/StakingPage";
 
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/donutlottery" element={<DonutLottery />} />
         <Route path="/highscore" element={<HighScore />} />
         <Route path="/staking" element={<Staking />} />
+        <Route path="/shroomlottery" element={<ShroomLottery />} />
       </Routes>
     </Router>
   );

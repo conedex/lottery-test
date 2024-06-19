@@ -105,8 +105,20 @@
   color: darkorchid;
 }
 
+.shroom-lottery-section {
+  background-color: whitesmoke;
+  border-radius: 15px;
+  margin: 20px 0;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+.shroom-lottery-section h2 {
+  color: red;
+}
+
 .logo {
-  width: 25%; /* adjust as needed for desktop */
+  width: 25%;
   height: auto;
 }
 

@@ -44,6 +44,20 @@ const LandingPage = () => {
             </Button>
           </Link>
         </div>
+        <div className="shroom-lottery-section">
+          <h2>Dash into the sensational Shroom Setting: Our SHROOM Lottery</h2>
+          <p>
+            Dive into our new lottery crafted for the Mushroom community. Bet
+            with SHROOM tokens and watch your fortune unfold. A slice of every
+            jackpot enriches the SHROOM ecosystem, fostering community growth
+            and shared success.
+          </p>
+          <Link to="/shroomlottery">
+            <Button type="default" size="large">
+              Enter Shroom Lottery
+            </Button>
+          </Link>
+        </div>
         <div className="lottery-section">
           <h2>Sponsored Lottery</h2>
           <p>
