@@ -1,0 +1,80 @@
+.Link {
+  display: flex;
+  flex-direction: row; /* Change from column to row */
+  justify-content: center;
+  align-items: center;
+  width: 30%; /* Ensure full width */
+}
+
+.LandingPage {
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-lottery-button {
+  font-family: "Press Start 2P", cursive;
+  font-size: 2rem;
+  background-color: #111; /* Dark background for the button */
+  border: 3px solid #e5ff00; /* Neon green border */
+  color: #ffffff;
+  padding: 15px 30px;
+  text-shadow: 0px 0px 10px #e5ff00; /* Green neon glow */
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  width: 25%;
+  height: 10%;
+}
+
+.main-lottery-button:hover {
+  background-color: #222; /* Slightly lighter on hover */
+  text-shadow: 0px 0px 20px #00ff00;
+}
+
+.highscore-page-button {
+  font-family: "Press Start 2P", cursive;
+  font-size: 2rem;
+  background-color: #111; /* Dark background for the button */
+  border: 3px solid #1eff00; /* Neon green border */
+  color: #ffffff;
+  padding: 15px 30px;
+  text-shadow: 0px 0px 10px #1eff00; /* Green neon glow */
+  cursor: pointer;
+  margin-top: 5%;
+}
+
+.highscore-page-button:hover {
+  background-color: #222; /* Slightly lighter on hover */
+  text-shadow: 0px 0px 20px #00ff00;
+}
+
+@media (max-height: 1366px) {
+  .Link {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .main-lottery-button {
+    font-size: 1.5rem; /* Smaller font size for smaller screens */
+    padding: 10px 20px; /* Smaller padding */
+    width: 17.5rem; /* Larger width percentage for better visibility */
+    height: 5rem;
+    margin: 10px auto; /* Center and add space around buttons */
+  }
+
+  .highscore-page-button {
+    font-size: 1.5rem; /* Adjust font size for smaller screens */
+    padding: 10px 20px; /* Adjust padding */
+    width: 100%; /* Adjust width to match other buttons */
+    margin: 10px auto; /* Center the button */
+    display: block; /* Ensure it's treated as a block element for centering */
+  }
+
+  .LandingPage {
+    padding: 10px;
+  }
+}

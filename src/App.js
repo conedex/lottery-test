@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
-import Lottery from "./components/Lottery";
-import DonutLottery from "./components/DonutLottery";
-import MultipleLottery from "./components/MultipleLottery";
-import ShroomLottery from "./components/ShroomLottery";
+import Lottery from "./components/lotteries/Lottery";
+import DonutLottery from "./components/lotteries/DonutLottery";
+import MultipleLottery from "./components/lotteries/MultipleLottery";
+import ShroomLottery from "./components/lotteries/ShroomLottery";
 import HighScore from "./components/HighScore";
 import Staking from "./components/StakingPage";
 

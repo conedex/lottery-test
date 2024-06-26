@@ -2,19 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Collapse, Modal, message, Alert, InputNumber } from "antd";
 import { LeftCircleOutlined } from "@ant-design/icons";
-import polygonLogo from "../images/eth-logo.png";
-import bitconeLogo from "../images/Mushroom_Logo.png";
-import LOTTERY_ABI from "../abis/Lottery.json";
-import TOKEN_ABI from "../abis/Token.json";
-import NFT_ABI from "../abis/Nft.json";
-import "./ShroomLottery.css";
+import polygonLogo from "../../images/polygonlogo.png";
+import bitconeLogo from "../../images/bitcone192.png";
+import LOTTERY_ABI from "../../abis/Lottery.json";
+import TOKEN_ABI from "../../abis/Token.json";
+import NFT_ABI from "../../abis/Nft.json";
+import "./Lottery.css";
 
 const { ethers } = require("ethers");
-const RPC_PROVIDER_URL = process.env.REACT_APP_SEPOLIA_URL;
+const RPC_PROVIDER_URL =
+  "https://polygon-mumbai.g.alchemy.com/v2/GFlZaSYw8xngFQT_K2m0yGmRkRzZlg6E";
 const { Panel } = Collapse;
 
-const CONTRACT_ADDRESS = "0x081EDaf9d173eC7BA08C7A33723A37E0B3EFBcd8";
-const TOKEN_CONTRACT_ADDRESS = "0xC64bFcE42BA6121A3CEdF8Fc721eEB626880D221";
+const CONTRACT_ADDRESS = "0x1b9469dabA419E2e83BcB0831c0E31fa9B6401F2";
+const TOKEN_CONTRACT_ADDRESS = "0x80273525B1548EeA1f211f4218Cf30c1a7C86b25";
 const NFT_CONTRACT_ADDRESS = "0x6Bd3a2F6b91830E964a5b3906E0DBF92a5A5Cc53";
 const lastWinnerHardcodeAmount = "16.960.000";
 const lastWinnerHardcodeAddress = "0x89B3fdf5cd302D012f92a81341017252B7b9515a";
@@ -92,7 +93,7 @@ function App() {
 
     if (window.ethereum) {
       window.ethereum.request({ method: "net_version" }).then((networkId) => {
-        if (networkId === "11155111") {
+        if (networkId === "80001") {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const contract = new ethers.Contract(
             CONTRACT_ADDRESS,
@@ -123,7 +124,7 @@ function App() {
         const networkId = await window.ethereum.request({
           method: "net_version",
         });
-        if (networkId === "11155111") {
+        if (networkId === "80001") {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
           const contract = new ethers.Contract(
             CONTRACT_ADDRESS,
@@ -147,7 +148,7 @@ function App() {
           setWrongNetwork(false);
         } else {
           setWrongNetwork(true);
-          setErrorMessage("Please switch to the Sepolia Testnet.");
+          setErrorMessage("Please switch to the Polygon Mumbai Testnet.");
         }
       });
     }
@@ -194,7 +195,7 @@ function App() {
     const networkId = await window.ethereum.request({
       method: "net_version",
     });
-    if (networkId !== "11155111") {
+    if (networkId !== "80001") {
       setWrongNetwork(true);
     } else {
       setAccount(accounts[0]);
@@ -206,7 +207,7 @@ function App() {
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }],
+        params: [{ chainId: "0x13881" }],
       });
     } catch (error) {
       console.error(error);
@@ -284,7 +285,7 @@ function App() {
           <>
             Successfully entered the Lottery.
             <a
-              href={`https://sepolia.etherscan.io/tx/${tx.hash}`}
+              href={`https://mumbai.polygonscan.com/tx/${tx.hash}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ marginLeft: "10px" }}
@@ -409,7 +410,7 @@ function App() {
                       <p className="modal-wallet-info">
                         Account Wallet:{" "}
                         <a
-                          href={`https://sepolia.etherscan.io/address/${account}`}
+                          href={`https://mumbai.polygonscan.com/address/${account}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -421,7 +422,7 @@ function App() {
                         <strong>{userEntries}</strong>
                       </p>
                       <p>
-                        SHROOM in current Lottery:{" "}
+                        CONE in current Lottery:{" "}
                         <strong>{formatNumber(userEntries * 10000)}</strong>
                       </p>
                       <p className="modal-wallet-info">
@@ -471,9 +472,9 @@ function App() {
             <p>Current Lottery Version: {lotteryVersion}</p>
             <p>
               Amount in current Lottery:{" "}
-              <strong>{formatNumber(currentPool)}</strong> SHROOM
+              <strong>{formatNumber(currentPool)}</strong> CONE
             </p>
-            <p>Entry Amount: {formatNumber(numEntries * 10000)} SHROOM</p>
+            <p>Entry Amount: {formatNumber(numEntries * 10000)} CONE</p>
             <p>Number of entries: {numEntries}</p>
             <InputNumber
               min={1}
@@ -500,15 +501,15 @@ function App() {
             </p>
             <p>
               Last amount won: <br></br>
-              <strong>{formatNumber(lastPrize)}</strong> SHROOM
+              <strong>{formatNumber(lastPrize)}</strong> CONE
             </p>
             <p>
-              Amount sent to SHROOM Treasuy: <br></br>
-              <strong>{coneTreasuryAmountHardcoded}</strong> SHROOM
+              Amount sent to CONE Treasuy: <br></br>
+              <strong>{coneTreasuryAmountHardcoded}</strong> CONE
             </p>
             <p>
-              Amount sent to SHROOM Treasuy overall: <br></br>
-              <strong>{coneTreasuryAmountHardcodedOverall}</strong> SHROOM
+              Amount sent to CONE Treasuy overall: <br></br>
+              <strong>{coneTreasuryAmountHardcodedOverall}</strong> CONE
             </p>
           </div>
           {/*<div className="lastWinner">
@@ -536,7 +537,7 @@ function App() {
             <Collapse defaultActiveKey={["0"]} className="faq-collapse">
               <Panel header="How does this Lottery work?" key="1">
                 <p>
-                  Users can purchase Lottery Tickets for a fixed price in SHROOM
+                  Users can purchase Lottery Tickets for a fixed price in CONE
                   per Ticket. At the end of each Lottery round a winning ticket
                   is randomly selected to win the Prize Pot!
                 </p>
@@ -558,14 +559,14 @@ function App() {
               </Panel>
               <Panel header="How many tickets can I buy?" key="4">
                 <p>
-                  The current price for an entry ticket is 10.000 SHROOM. Each
+                  The current price for an entry ticket is 10.000 CONE. Each
                   user can purchase an unlimited amount of tickets.
                 </p>
               </Panel>
               <Panel header="Is there any kind of fee to play?" key="5">
                 <p>
                   There is no fee to purchase Lottery Tickets, but there is a
-                  20% fee on the Prize Pool. 5% of which goes to the SHROOM
+                  20% fee on the Prize Pool. 5% of which goes to the Bitcone
                   Treasury Wallet, along with a 15% which goes to the Creator to
                   cover $LINK Chainlink utilization costs on every transaction,
                   as well as operational and hosting costs.

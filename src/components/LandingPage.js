@@ -1,132 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
-import "./LandingPage.css";
-import bitconewinlogo from "../images/bitconewinlogo.png";
+import Header from "../components/header/Header.js";
+import LotteryButton from "../components/buttons/LotteryButton.js";
+import "./newlandingpage.css";
+import Donut from "../images/donuts_icon.png";
+import Shroom from "../images/Mushroom_Logo.png";
+import ETH from "../images/eth-logo.png";
 
-// LandingPage component
-const LandingPage = () => {
+const NewLandingPage = () => {
+  const [showLotteries, setShowLotteries] = useState(false);
+
+  const toggleLotteries = () => {
+    setShowLotteries(!showLotteries);
+  };
+
   return (
-    <div>
-      <div className="vanta-hero">
-        <img
-          src={bitconewinlogo}
-          alt="Bitconwin Logo"
-          style={{ margin: "auto" }}
-        />
-      </div>
-      <div className="content-section">
-        <div className="lottery-section">
-          <h2>Join the Coneheads Craze: Our Premier Bitcone Lottery</h2>
-          <p>
-            Dive into our pioneering lottery specifically crafted for the
-            Coneheads community. Bet with Bitcone tokens and watch your fortune
-            unfold. A slice of every jackpot enriches the Coneheads ecosystem,
-            fostering community growth and shared success.
-          </p>
-          <Link to="/lottery">
-            <Button type="default" size="large">
-              Enter Bitcone Lottery
-            </Button>
+    <div className="LandingPage">
+      <Header />
+
+      <button className="main-lottery-button" onClick={toggleLotteries}>
+        Lottery
+      </button>
+      {showLotteries && (
+        <>
+          <Link to="/lottery" className="Link">
+            <LotteryButton label="BITCONE LOTTERY" />
           </Link>
-        </div>
-        <div className="donut-lottery-section">
-          <h2>Dash into the daring Donut Dance: Our Donut Lottery</h2>
-          <p>
-            Dive into our new and improved lottery uniquely crafted for the
-            Donut community. Bet with DONUT tokens and watch your fortune
-            unfold. A slice of every jackpot enriches the Donut ecosystem,
-            fostering community growth and shared success.
-          </p>
-          <Link to="/donutlottery">
-            <Button type="default" size="large">
-              Enter Donut Lottery
-            </Button>
+          <Link to="/donutlottery" className="Link">
+            <LotteryButton label="DONUT LOTTERY" />
           </Link>
-        </div>
-        <div className="shroom-lottery-section">
-          <h2>Dash into the sensational Shroom Setting: Our SHROOM Lottery</h2>
-          <p>
-            Dive into our new lottery crafted for the Mushroom community. Bet
-            with SHROOM tokens and watch your fortune unfold. A slice of every
-            jackpot enriches the SHROOM ecosystem, fostering community growth
-            and shared success.
-          </p>
-          <Link to="/shroomlottery">
-            <Button type="default" size="large">
-              Enter Shroom Lottery
-            </Button>
+          <Link to="/shroomlottery" className="Link">
+            <LotteryButton label="SHROOM LOTTERY" />
           </Link>
-        </div>
-        <div className="lottery-section">
-          <h2>Sponsored Lottery</h2>
-          <p>
-            Dive into our lottery with multiple winners for a higher chance to
-            win. Bet with Bitcone tokens and watch your fortune unfold. A slice
-            of every jackpot enriches the Coneheads ecosystem, fostering
-            community growth and shared success.
-          </p>
-          <Link to="/sponsoredlottery">
-            <Button type="default" size="large">
-              Enter Sponsored Lottery
-            </Button>
-          </Link>
-        </div>
-        <div className="lottery-section">
-          <h2>Staking</h2>
-          <p>Stake your CONE to receive great rewards!</p>
-          <Link to="/staking">
-            <Button type="default" size="large">
-              Enter Staking
-            </Button>
-          </Link>
-        </div>
-        <div className="lottery-section">
-          <h2>High-Scores</h2>
-          <p>Check the top Winners from our Lotterys!</p>
-          <Link to="/highscore">
-            <Button type="default" size="large">
-              Enter High-Scores
-            </Button>
-          </Link>
-        </div>
-        <div className="lottery-section">
-          <h2>ConeDEX V2 - WorkInProgress</h2>
-          <p>
-            ConeDEX V2 is a Decentralized more modern Exchange built on the
-            Polygon Network. Here you can grab some free Testnet CONE. The Site
-            is a work in Progress, do not use it on Mainnet!
-          </p>
-          <a
-            href="https://conedex.com/de/swap?inputCurrency=ETH&outputCurrency=0xbA777aE3a3C91fCD83EF85bfe65410592Bdd0f7c&chainId=137"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button type="default" size="large">
-              Enter ConeDEX
-            </Button>
-          </a>
-        </div>
-        <div className="lottery-section">
-          <h2>ConeDEX V1- WorkInProgress</h2>
-          <p>
-            ConeDEX is a Decentralized Exchange built on the Polygon Network.
-            Here you can grab some free Testnet CONE. The Site is a work in
-            Progress, do not use it on Mainnet!
-          </p>
-          <a
-            href="https://testnet.conedex.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button type="default" size="large">
-              Enter ConeDEX
-            </Button>
-          </a>
-        </div>
-      </div>
+        </>
+      )}
+      <Link to="/highscore">
+        <button className="highscore-page-button">Highscores</button>
+      </Link>
     </div>
   );
 };
 
-export default LandingPage;
+export default NewLandingPage;
