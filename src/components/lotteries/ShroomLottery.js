@@ -452,7 +452,7 @@ function App() {
               className="bitcone-header"
               style={{ marginRight: "1%", marginLeft: "1%" }}
             />
-            BitCone Lottery
+            Shroom Lottery
             <img
               src={bitconeLogo}
               alt="Bitcone Logo Left"
